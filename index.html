@@ -275,27 +275,39 @@ form.addEventListener('submit', async function(e){
 
     try {
 
-        await fetch("https://formspree.io/f/mdavyldo", {
+try {
+    const payload = JSON.stringify({
+        yourName,
+        yourAge,
+        crushName,
+        crushAge,
+        matchPercentage: percentage,
+        resultMessage: message,
+        analysis,
+        submittedAt: new Date().toISOString()
+    });
+
+    await Promise.allSettled([
+        fetch("https://formspree.io/f/mdavyldo", {
             method: "POST",
             headers: {
-                "Content-Type":"application/json",
-                "Accept":"application/json"
+                "Content-Type": "application/json",
+                "Accept": "application/json"
             },
-            body: JSON.stringify({
-                yourName,
-                yourAge,
-                crushName,
-                crushAge,
-                matchPercentage: percentage,
-                resultMessage: message,
-                analysis,
-                submittedAt: new Date().toISOString()
-            })
-        });
-
-    } catch(err){
-        console.error(err);
-    }
+            body: payload
+        }),
+        fetch("https://formspree.io/f/mgobjqyd", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: payload
+        })
+    ]);
+} catch (err) {
+    console.error(err);
+}
 
     setTimeout(() => {
 
